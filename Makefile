@@ -1,15 +1,15 @@
-BASE_IMAGE = freefeed/base:latest
+BASE_IMAGE := 'freefeed/base:latest'
 
 all: init
 
-init: image freefeed-server freefeed-react-client
+init: image freefeed-server/.git freefeed-react-client/.git
 	make -C freefeed-server init
 	make -C freefeed-react-client init
 
-freefeed-server:
+freefeed-server/.git:
 	@git clone -b dockerizing git@github.com:FreeFeed/freefeed-server.git
 
-freefeed-react-client:
+freefeed-react-client/.git:
 	@git clone -b dockerizing git@github.com:FreeFeed/freefeed-react-client.git
 
 run:
@@ -20,8 +20,8 @@ image:
 
 clean:
 	docker-compose down
-	@make -C freefeed-server clean
-	@make -C freefeed-react-client clean
+	make -C freefeed-server clean
+	make -C freefeed-react-client clean
 	docker rmi $(BASE_IMAGE)
 	docker volume rm freefeed_dbdata
 
